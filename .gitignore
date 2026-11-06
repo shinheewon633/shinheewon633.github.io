@@ -1,0 +1,10 @@
+# 비밀 정보와 개인 기록은 GitHub에 올리지 않는다
+.env
+.env.*
+node_modules/
+
+# Kiro 설정과 개인 기록 (MCP 설정, steering의 개인 허브 주소 등)
+.kiro/
+
+# Netlify 로컬 캐시
+.netlify/

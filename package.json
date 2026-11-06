@@ -1,0 +1,9 @@
+{
+  "name": "shinheewon-portfolio",
+  "version": "1.0.0",
+  "description": "신희원 포트폴리오 + 방명록 (Netlify Functions + Supabase)",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}

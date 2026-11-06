@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>신희원 | Portfolio</title>
+  <meta name="description" content="국민대학교 경영정보학부 신희원의 자기소개 포트폴리오" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121a2b;
+      --panel-2: #1b263d;
+      --primary: #7dd3fc;
+      --secondary: #c4b5fd;
+      --text: #e5eefb;
+      --muted: #a8b4cf;
+      --accent: #34d399;
+      --pink: #f472b6;
+      --orange: #fb923c;
+      --yellow: #fde047;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 20px 45px rgba(0,0,0,0.35);
+      --grad-primary: linear-gradient(135deg, #7dd3fc, #8b5cf6 55%, #f472b6);
+      --grad-warm: linear-gradient(135deg, #fb923c, #f472b6);
+      --grad-cool: linear-gradient(135deg, #34d399, #7dd3fc);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* 움직이는 오로라 배경 */
+    .aurora {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(45% 45% at 15% 20%, rgba(125,211,252,0.25), transparent 70%),
+        radial-gradient(40% 40% at 85% 15%, rgba(244,114,182,0.22), transparent 70%),
+        radial-gradient(50% 50% at 75% 80%, rgba(139,92,246,0.22), transparent 70%),
+        radial-gradient(45% 45% at 20% 85%, rgba(52,211,153,0.18), transparent 70%),
+        linear-gradient(135deg, #0b1020, #10182c 40%, #0d1324);
+      background-size: 200% 200%, 200% 200%, 200% 200%, 200% 200%, 100% 100%;
+      animation: aurora 18s ease-in-out infinite;
+    }
+    @keyframes aurora {
+      0%, 100% { background-position: 0% 0%, 100% 0%, 100% 100%, 0% 100%, 0 0; }
+      50% { background-position: 30% 40%, 60% 30%, 40% 60%, 50% 30%, 0 0; }
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .container {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(10px);
+      background: rgba(11,16,32,0.65);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 72px;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      background: var(--grad-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: var(--muted);
+      font-size: 0.96rem;
+      position: relative;
+      padding-bottom: 4px;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: var(--grad-primary);
+      border-radius: 2px;
+      transition: width 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .hero {
+      padding: 110px 0 70px;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(244,114,182,0.1);
+      border: 1px solid rgba(244,114,182,0.35);
+      color: var(--pink);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      margin-bottom: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      animation: pulse 2.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(244,114,182,0.35); }
+      50% { box-shadow: 0 0 0 10px rgba(244,114,182,0); }
+    }
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      margin: 0 0 16px;
+      line-height: 1.05;
+      background: linear-gradient(135deg, #e5eefb, #7dd3fc 45%, #c4b5fd 75%, #f472b6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .lead {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 620px;
+      margin-bottom: 28px;
+    }
+    .button-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+    .btn.primary {
+      background: var(--grad-primary);
+      background-size: 200% 200%;
+      color: #08111d;
+      box-shadow: var(--shadow);
+      animation: shift 5s ease infinite;
+    }
+    @keyframes shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .btn.secondary {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      color: var(--text);
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      opacity: 0.96;
+      box-shadow: 0 16px 30px rgba(244,114,182,0.25);
+    }
+    .profile-card {
+      background: linear-gradient(180deg, rgba(27,38,61,0.9), rgba(18,26,43,0.95));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    .profile-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 24px;
+      padding: 1px;
+      background: var(--grad-primary);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .avatar {
+      width: 100%;
+      height: 360px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #8b5cf6, #f472b6 55%, #fb923c);
+      background-size: 200% 200%;
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7rem;
+      font-weight: 800;
+      color: #0b1020;
+      margin-bottom: 18px;
+      animation: shift 6s ease infinite, float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .info-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+    .info-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--muted);
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .info-list strong {
+      color: var(--text);
+    }
+    section {
+      padding: 30px 0 70px;
+    }
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 24px;
+      display: inline-block;
+      background: var(--grad-cool);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .card {
+      background: rgba(18,26,43,0.8);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--grad-primary);
+    }
+    .card:nth-child(2)::before { background: var(--grad-warm); }
+    .card:nth-child(3)::before { background: var(--grad-cool); }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 28px 50px rgba(0,0,0,0.45);
+    }
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+    .card p, .card li {
+      color: var(--muted);
+      margin: 0;
+    }
+    .card ul {
+      padding-left: 18px;
+      margin: 10px 0 0;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .tag {
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 0.82rem;
+      white-space: nowrap;
+      background: rgba(52,211,153,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(52,211,153,0.22);
+      transition: transform 0.2s ease;
+    }
+    .tag:hover { transform: scale(1.08); }
+    .tag.c2 { background: rgba(125,211,252,0.12); color: var(--primary); border-color: rgba(125,211,252,0.22); }
+    .tag.c3 { background: rgba(244,114,182,0.12); color: var(--pink); border-color: rgba(244,114,182,0.22); }
+    .tag.c4 { background: rgba(251,146,60,0.12); color: var(--orange); border-color: rgba(251,146,60,0.22); }
+    .tag.c5 { background: rgba(196,181,253,0.12); color: var(--secondary); border-color: rgba(196,181,253,0.22); }
+
+    .timeline {
+      display: grid;
+      gap: 18px;
+    }
+    .timeline-item {
+      padding-left: 18px;
+      border-left: 2px solid rgba(125, 211, 252, 0.5);
+      position: relative;
+      margin-left: 8px;
+    }
+    .timeline-item::before {
+      content: "";
+      width: 14px;
+      height: 14px;
+      background: var(--grad-warm);
+      border-radius: 50%;
+      position: absolute;
+      left: -8px;
+      top: 4px;
+      box-shadow: 0 0 0 4px rgba(244,114,182,0.15);
+    }
+    .timeline-item h4 {
+      margin: 0 0 5px;
+      font-size: 1.08rem;
+    }
+    .timeline-item p {
+      margin: 0;
+      color: var(--muted);
+    }
+    .contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .contact a {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 18px;
+      color: var(--text);
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+    .contact a:hover {
+      transform: translateY(-3px);
+      border-color: transparent;
+      background: var(--grad-primary);
+      color: #08111d;
+    }
+    footer {
+      padding: 40px 0 70px;
+      text-align: center;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* 방명록 */
+    .gb-field {
+      margin-bottom: 14px;
+    }
+    .gb-field label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .gb-field input,
+    .gb-field textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.98rem;
+      resize: vertical;
+    }
+    .gb-field input:focus,
+    .gb-field textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .gb-status {
+      margin-left: 12px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .gb-status.error { color: var(--pink); }
+    .gb-status.ok { color: var(--accent); }
+    .gb-list {
+      list-style: none;
+      padding: 0;
+      margin: 26px 0 0;
+      display: grid;
+      gap: 14px;
+      max-width: 560px;
+    }
+    .gb-item {
+      background: rgba(18,26,43,0.8);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+    .gb-item .gb-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .gb-item .gb-nick {
+      font-weight: 700;
+      color: var(--text);
+    }
+    .gb-item .gb-time {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .gb-item .gb-msg {
+      color: var(--muted);
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* 스크롤 등장 애니메이션 */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 860px) {
+      .hero-inner, .grid {
+        grid-template-columns: 1fr;
+      }
+      .avatar {
+        height: 260px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="aurora"></div>
+
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">SHIN HEE WON</div>
+        <div class="nav-links">
+          <a href="#about">About</a>
+          <a href="#skills">Skills</a>
+          <a href="#experience">Experience</a>
+          <a href="#contact">Contact</a>
+          <a href="#guestbook">Guestbook</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="reveal">
+          <div class="badge">Student Developer</div>
+          <h1>안녕하세요, 신희원입니다.</h1>
+          <p class="lead">
+            저는 현재 국민대학교 경영정보학부에 재학 중인 학생으로, 사용자 경험과 기술을 연결하는 데 관심이 많습니다.
+            꾸준히 배우고, 문제를 해결하며, 더 나은 서비스와 시스템을 만드는 데 열정을 가지고 있습니다.
+          </p>
+          <div class="button-row">
+            <a href="#contact" class="btn primary">연락하기</a>
+            <a href="#about" class="btn secondary">자기소개 보기</a>
+          </div>
+        </div>
+        <div class="profile-card reveal">
+          <div class="avatar">H</div>
+          <ul class="info-list">
+            <li><span>이름</span><strong>신희원</strong></li>
+            <li><span>소속</span><strong>국민대학교 경영정보학부</strong></li>
+            <li><span>관심 분야</span><strong>웹/서비스 기획, UX, 데이터</strong></li>
+            <li><span>상태</span><strong>열정적인 학습 중</strong></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <h2 class="section-title reveal">About Me</h2>
+        <div class="grid">
+          <div class="card reveal">
+            <h3>소개</h3>
+            <p>
+              저는 다양한 관점을 이해하고, 실제로 서비스에 적용할 수 있는 아이디어를 좋아합니다.
+              학업을 통해 경영과 정보기술을 함께 배우며, 사용자 관점과 기술적 구현력을 균형 있게 키워가고 있습니다.
+            </p>
+          </div>
+          <div class="card reveal">
+            <h3>가치관</h3>
+            <p>
+              단순히 결과만 보는 것이 아니라, 과정에서 배운 점을 바탕으로 더 나은 방향을 고민하고,
+              협업을 통해 함께 성장하는 것을 중요하게 생각합니다.
+            </p>
+          </div>
+          <div class="card reveal">
+            <h3>목표</h3>
+            <p>
+              앞으로는 실제 사용자 문제를 해결할 수 있는 프로젝트와 경험을 쌓으며,
+              다양한 분야를 연결하는 개발자로 성장하고 싶습니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="container">
+        <h2 class="section-title reveal">Skills</h2>
+        <div class="grid">
+          <div class="card reveal">
+            <h3>기획 &amp; 분석</h3>
+            <ul>
+              <li>서비스 아이디어 정리</li>
+              <li>사용자 관점 분석</li>
+              <li>문제 정의와 개선 방향 탐색</li>
+            </ul>
+            <div class="skill-tags">
+              <span class="tag">UX</span>
+              <span class="tag c2">Service Design</span>
+              <span class="tag c3">Problem Solving</span>
+            </div>
+          </div>
+          <div class="card reveal">
+            <h3>개발 관심</h3>
+            <ul>
+              <li>웹 기반 서비스 이해</li>
+              <li>프론트엔드 기본 학습</li>
+              <li>UI/UX와 기술의 연결</li>
+            </ul>
+            <div class="skill-tags">
+              <span class="tag c4">HTML</span>
+              <span class="tag c2">CSS</span>
+              <span class="tag c5">JavaScript</span>
+            </div>
+          </div>
+          <div class="card reveal">
+            <h3>강점</h3>
+            <ul>
+              <li>끊임없는 자기계발</li>
+              <li>협업과 소통</li>
+              <li>도전적이고 성장 지향적 태도</li>
+            </ul>
+            <div class="skill-tags">
+              <span class="tag c3">Learning</span>
+              <span class="tag">Communication</span>
+              <span class="tag c5">Growth</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="container">
+        <h2 class="section-title reveal">Experience &amp; Growth</h2>
+        <div class="timeline">
+          <div class="timeline-item reveal">
+            <h4>국민대학교 경영정보학부 재학 중</h4>
+            <p>
+              경영과 정보기술을 함께 이해하며, 실제 비즈니스 환경에서 기술이 어떻게 활용되는지 배우고 있습니다.
+            </p>
+          </div>
+          <div class="timeline-item reveal">
+            <h4>개발과 서비스에 대한 관심 확대</h4>
+            <p>
+              웹, 사용자 경험, 데이터 활용에 흥미를 느끼며 다양한 프로젝트와 학습을 통해 실무 감각을 키우고 있습니다.
+            </p>
+          </div>
+          <div class="timeline-item reveal">
+            <h4>앞으로의 목표</h4>
+            <p>
+              더 많은 프로젝트를 경험하며, 사용자가 체감하는 가치를 만들 수 있는 사람으로 성장하고 싶습니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <h2 class="section-title reveal">Contact</h2>
+        <p class="lead reveal">
+          함께 성장하고 협업할 수 있는 기회를 언제든 환영합니다. 관심 있는 프로젝트나 의견이 있다면 편하게 연락주세요.
+        </p>
+        <div class="contact reveal">
+          <a href="mailto:heewonnice@kookmin.ac.kr">Email</a>
+          <a href="https://github.com/shinheewon633" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="guestbook">
+      <div class="container">
+        <h2 class="section-title reveal">Guestbook</h2>
+        <p class="lead reveal">
+          방문해 주셔서 감사합니다. 짧은 한마디를 남겨 주세요. 남긴 글은 모두에게 보입니다.
+        </p>
+
+        <div class="card reveal" style="max-width: 560px;">
+          <form id="gb-form" autocomplete="off">
+            <div class="gb-field">
+              <label for="gb-nickname">이름 / 별명</label>
+              <input id="gb-nickname" name="nickname" type="text" maxlength="12"
+                     placeholder="2~12자" required />
+            </div>
+            <div class="gb-field">
+              <label for="gb-message">메시지</label>
+              <textarea id="gb-message" name="message" maxlength="100" rows="3"
+                        placeholder="1~100자의 한마디를 남겨 주세요" required></textarea>
+            </div>
+            <button type="submit" class="btn primary" id="gb-submit">남기기</button>
+            <span id="gb-status" class="gb-status"></span>
+          </form>
+        </div>
+
+        <ul id="gb-list" class="gb-list reveal"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 Shin Hee Won. All rights reserved.
+  </footer>
+
+  <script>
+    // 스크롤 시 요소가 부드럽게 나타나도록
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+  </script>
+
+  <script>
+    // 방명록: 서버 함수(/api/guestbook)를 통해 Supabase에 저장·조회
+    (function () {
+      const form = document.getElementById("gb-form");
+      const nickInput = document.getElementById("gb-nickname");
+      const msgInput = document.getElementById("gb-message");
+      const submitBtn = document.getElementById("gb-submit");
+      const statusEl = document.getElementById("gb-status");
+      const listEl = document.getElementById("gb-list");
+
+      const NICK_MIN = 2, NICK_MAX = 12, MSG_MIN = 1, MSG_MAX = 100;
+
+      function setStatus(text, type) {
+        statusEl.textContent = text;
+        statusEl.className = "gb-status" + (type ? " " + type : "");
+      }
+
+      function formatTime(iso) {
+        const d = new Date(iso);
+        if (isNaN(d)) return "";
+        return d.toLocaleString("ko-KR", {
+          year: "numeric", month: "2-digit", day: "2-digit",
+          hour: "2-digit", minute: "2-digit"
+        });
+      }
+
+      // 글 목록 그리기 (XSS 방지: textContent만 사용, HTML로 실행하지 않음)
+      function render(entries) {
+        listEl.innerHTML = "";
+        if (!entries || entries.length === 0) {
+          const li = document.createElement("li");
+          li.className = "gb-item";
+          li.textContent = "아직 남겨진 글이 없습니다. 첫 글을 남겨 주세요.";
+          listEl.appendChild(li);
+          return;
+        }
+        for (const e of entries) {
+          const li = document.createElement("li");
+          li.className = "gb-item";
+
+          const meta = document.createElement("div");
+          meta.className = "gb-meta";
+          const nick = document.createElement("span");
+          nick.className = "gb-nick";
+          nick.textContent = e.nickname;
+          const time = document.createElement("span");
+          time.className = "gb-time";
+          time.textContent = formatTime(e.created_at);
+          meta.appendChild(nick);
+          meta.appendChild(time);
+
+          const msg = document.createElement("p");
+          msg.className = "gb-msg";
+          msg.textContent = e.message;
+
+          li.appendChild(meta);
+          li.appendChild(msg);
+          listEl.appendChild(li);
+        }
+      }
+
+      async function loadEntries() {
+        try {
+          const res = await fetch("/api/guestbook");
+          if (!res.ok) throw new Error("load failed");
+          const data = await res.json();
+          render(data.entries);
+        } catch (err) {
+          listEl.innerHTML = "";
+          const li = document.createElement("li");
+          li.className = "gb-item";
+          li.textContent = "방명록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.";
+          listEl.appendChild(li);
+        }
+      }
+
+      form.addEventListener("submit", async function (ev) {
+        ev.preventDefault();
+        const nickname = nickInput.value.trim();
+        const message = msgInput.value.trim();
+
+        // 브라우저 쪽 1차 검사 (서버에서도 다시 검사함)
+        if (nickname.length < NICK_MIN || nickname.length > NICK_MAX) {
+          setStatus("별명은 " + NICK_MIN + "~" + NICK_MAX + "자여야 합니다.", "error");
+          return;
+        }
+        if (message.length < MSG_MIN || message.length > MSG_MAX) {
+          setStatus("메시지는 " + MSG_MIN + "~" + MSG_MAX + "자여야 합니다.", "error");
+          return;
+        }
+
+        submitBtn.disabled = true;
+        setStatus("저장 중...", "");
+
+        try {
+          const res = await fetch("/api/guestbook", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nickname, message }),
+          });
+          const data = await res.json();
+
+          if (!res.ok || !data.ok) {
+            // 서버가 거절하면 성공으로 표시하지 않는다
+            setStatus(data.error || "저장에 실패했습니다.", "error");
+            return;
+          }
+
+          setStatus("남겨 주셔서 감사합니다!", "ok");
+          nickInput.value = "";
+          msgInput.value = "";
+          await loadEntries();
+        } catch (err) {
+          setStatus("저장 중 오류가 발생했습니다. 다시 시도해 주세요.", "error");
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+
+      loadEntries();
+    })();
+  </script>
+</body>
+</html>

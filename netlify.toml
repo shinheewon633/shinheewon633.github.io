@@ -1,0 +1,12 @@
+# Netlify 배포 설정
+
+[build]
+  # 정적 사이트(HTML 하나)라 별도 빌드 과정이 없다. 현재 폴더를 그대로 게시한다.
+  publish = "."
+  functions = "netlify/functions"
+
+# /api/guestbook 요청을 서버 함수로 연결한다.
+[[redirects]]
+  from = "/api/guestbook"
+  to = "/.netlify/functions/guestbook"
+  status = 200
