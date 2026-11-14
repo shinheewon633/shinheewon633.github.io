@@ -420,6 +420,43 @@
     }
     .like-count { min-width: 1.2em; text-align: center; }
 
+    /* 연락하기 버튼 (눈에 띄는 CTA) */
+    .contact-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      margin: 10px 0 22px;
+      padding: 18px 26px;
+      border-radius: 16px;
+      background: var(--grad-primary);
+      background-size: 200% 200%;
+      color: #08111d;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: shift 6s ease infinite;
+    }
+    .contact-cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 36px rgba(125,211,252,0.3);
+    }
+    .contact-cta-icon {
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+    .contact-cta-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .contact-cta-text strong {
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+    .contact-cta-mail {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
     /* 방명록 */
     .gb-field {
       margin-bottom: 14px;
@@ -667,8 +704,16 @@
         <p class="lead reveal">
           함께 성장하고 협업할 수 있는 기회를 언제든 환영합니다. 관심 있는 프로젝트나 의견이 있다면 편하게 연락주세요.
         </p>
+
+        <a href="mailto:heewonnice@kookmin.ac.kr" class="contact-cta reveal">
+          <span class="contact-cta-icon">✉</span>
+          <span class="contact-cta-text">
+            <strong>이메일로 연락하기</strong>
+            <span class="contact-cta-mail">heewonnice@kookmin.ac.kr</span>
+          </span>
+        </a>
+
         <div class="contact reveal">
-          <a href="mailto:heewonnice@kookmin.ac.kr">Email</a>
           <a href="https://github.com/shinheewon633" target="_blank" rel="noreferrer">GitHub</a>
           <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
         </div>
