@@ -10,3 +10,9 @@
   from = "/api/guestbook"
   to = "/.netlify/functions/guestbook"
   status = 200
+
+# /api/likes 요청을 좋아요 서버 함수로 연결한다.
+[[redirects]]
+  from = "/api/likes"
+  to = "/.netlify/functions/likes"
+  status = 200

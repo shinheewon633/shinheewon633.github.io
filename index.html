@@ -378,6 +378,48 @@
       border-top: 1px solid var(--border);
     }
 
+    /* 좋아요 */
+    .like-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: rgba(18,26,43,0.8);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 22px;
+      margin-bottom: 26px;
+      max-width: 560px;
+    }
+    .like-text {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+    .like-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(244,114,182,0.35);
+      background: rgba(244,114,182,0.1);
+      color: var(--pink);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+    .like-btn:hover { background: rgba(244,114,182,0.18); }
+    .like-btn:active { transform: scale(0.94); }
+    .like-btn:disabled { opacity: 0.6; cursor: default; }
+    .like-heart { font-size: 1.1rem; }
+    .like-btn.liked {
+      background: var(--grad-warm);
+      color: #0b1020;
+      border-color: transparent;
+    }
+    .like-count { min-width: 1.2em; text-align: center; }
+
     /* 방명록 */
     .gb-field {
       margin-bottom: 14px;
@@ -636,6 +678,15 @@
     <section id="guestbook">
       <div class="container">
         <h2 class="section-title reveal">Guestbook</h2>
+
+        <div class="like-box reveal">
+          <span class="like-text">이 포트폴리오가 마음에 드셨나요?</span>
+          <button id="like-btn" class="like-btn" type="button">
+            <span class="like-heart">♥</span>
+            <span id="like-count" class="like-count">0</span>
+          </button>
+        </div>
+
         <p class="lead reveal">
           방문해 주셔서 감사합니다. 짧은 한마디를 남겨 주세요. 남긴 글은 모두에게 보입니다.
         </p>
@@ -800,6 +851,47 @@
       });
 
       loadEntries();
+    })();
+  </script>
+
+  <script>
+    // 좋아요: 서버 함수(/api/likes)를 통해 Supabase에 저장·조회
+    (function () {
+      const btn = document.getElementById("like-btn");
+      const countEl = document.getElementById("like-count");
+
+      // 현재 누적 좋아요 수 불러오기
+      async function loadCount() {
+        try {
+          const res = await fetch("/api/likes");
+          if (!res.ok) throw new Error("load failed");
+          const data = await res.json();
+          countEl.textContent = data.count;
+        } catch (err) {
+          // 불러오기 실패 시 숫자는 그대로 두고 조용히 넘어간다
+        }
+      }
+
+      btn.addEventListener("click", async function () {
+        btn.disabled = true; // 중복 클릭 방지
+        try {
+          const res = await fetch("/api/likes", { method: "POST" });
+          const data = await res.json();
+
+          if (!res.ok || !data.ok) {
+            // 실패하면 성공으로 표시하지 않는다
+            btn.disabled = false;
+            return;
+          }
+
+          countEl.textContent = data.count;
+          btn.classList.add("liked"); // 눌렀다는 시각 표시
+        } catch (err) {
+          btn.disabled = false;
+        }
+      });
+
+      loadCount();
     })();
   </script>
 </body>
