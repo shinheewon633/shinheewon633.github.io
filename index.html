@@ -1142,6 +1142,15 @@
         green: { icon: "🌿", label: "그린" },
       };
 
+      function openMenu() {
+        menu.hidden = false;
+        btn.setAttribute("aria-expanded", "true");
+      }
+      function closeMenu() {
+        menu.hidden = true;
+        btn.setAttribute("aria-expanded", "false");
+      }
+
       function apply(key) {
         if (!THEMES[key]) key = "dark";
         document.body.classList.remove("light", "blue", "green");
@@ -1152,18 +1161,12 @@
         current = key;
       }
 
-      function toggleMenu(open) {
-        const willOpen = open === undefined ? menu.hidden : open;
-        menu.hidden = !willOpen;
-        btn.setAttribute("aria-expanded", String(willOpen));
-      }
-
       let current = localStorage.getItem("theme") || "dark";
       apply(current);
 
       btn.addEventListener("click", function (e) {
         e.stopPropagation();
-        toggleMenu();
+        if (menu.hidden) openMenu(); else closeMenu();
       });
 
       options.forEach((o) => {
@@ -1172,15 +1175,20 @@
           const key = o.dataset.theme;
           localStorage.setItem("theme", key);
           apply(key);
-          toggleMenu(false);
+          closeMenu();
         });
       });
 
       // 바깥을 누르면 메뉴 닫기
       document.addEventListener("click", function (e) {
         if (!menu.hidden && !e.target.closest(".theme-wrap")) {
-          toggleMenu(false);
+          closeMenu();
         }
+      });
+
+      // ESC 키로 닫기
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !menu.hidden) closeMenu();
       });
     })();
   </script>
