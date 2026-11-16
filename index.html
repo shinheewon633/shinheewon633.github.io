@@ -157,7 +157,7 @@
     .theme-caret { font-size: 0.7rem; margin-left: 2px; opacity: 0.7; }
     .theme-menu {
       position: absolute;
-      top: calc(100% + 8px);
+      top: 100%;
       right: 0;
       min-width: 150px;
       background: var(--panel);
@@ -169,6 +169,17 @@
       gap: 4px;
       box-shadow: var(--shadow);
       z-index: 200;
+      /* 위쪽 여백을 패딩으로 주어, 버튼과 시각적으로 떨어져 보이지만 hover 영역은 이어지게 함 */
+      margin-top: 0;
+    }
+    .theme-menu::before {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: transparent;
     }
     .theme-option {
       display: flex;
@@ -1143,13 +1154,19 @@
         green: { icon: "🌿", label: "그린" },
       };
 
+      let closeTimer = null;
       function openMenu() {
+        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
         menu.hidden = false;
         btn.setAttribute("aria-expanded", "true");
       }
       function closeMenu() {
         menu.hidden = true;
         btn.setAttribute("aria-expanded", "false");
+      }
+      function scheduleClose() {
+        if (closeTimer) clearTimeout(closeTimer);
+        closeTimer = setTimeout(closeMenu, 250);
       }
 
       function apply(key) {
@@ -1165,9 +1182,9 @@
       let current = localStorage.getItem("theme") || "dark";
       apply(current);
 
-      // 마우스를 갖다 대면 열고, 치우면 닫기 (가까이 갔을 때만 표시)
+      // 마우스를 갖다 대면 열고, 치우면 짧은 딜레이 후 닫기 (버튼↔목록 이동 중 깜빡임 방지)
       wrap.addEventListener("mouseenter", openMenu);
-      wrap.addEventListener("mouseleave", closeMenu);
+      wrap.addEventListener("mouseleave", scheduleClose);
 
       // 터치 기기(모바일) 대비: 버튼을 누르면 토글
       btn.addEventListener("click", function (e) {
