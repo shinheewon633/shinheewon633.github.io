@@ -152,6 +152,41 @@
       transition: 0.2s ease;
     }
     body.light .theme-toggle { background: rgba(15,23,42,0.04); }
+    /* 테마 드롭다운 */
+    .theme-wrap { position: relative; }
+    .theme-caret { font-size: 0.7rem; margin-left: 2px; opacity: 0.7; }
+    .theme-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 150px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: var(--shadow);
+      z-index: 200;
+    }
+    .theme-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 12px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s ease;
+    }
+    .theme-option:hover { background: rgba(125,211,252,0.12); }
+    .theme-option.active { background: rgba(125,211,252,0.18); font-weight: 700; }
     .theme-toggle:hover { border-color: var(--primary); }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -702,10 +737,19 @@
           <a href="#experience">Experience</a>
           <a href="#contact">Contact</a>
           <a href="#guestbook">Guestbook</a>
-          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="테마 전환">
-            <span id="theme-icon">🌙</span>
-            <span id="theme-label">밝게</span>
-          </button>
+          <div class="theme-wrap">
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="테마 선택" aria-haspopup="true" aria-expanded="false">
+              <span id="theme-icon">🌙</span>
+              <span id="theme-label">다크</span>
+              <span class="theme-caret">▾</span>
+            </button>
+            <div id="theme-menu" class="theme-menu" role="menu" hidden>
+              <button class="theme-option" type="button" data-theme="dark" role="menuitem">🌙 다크</button>
+              <button class="theme-option" type="button" data-theme="light" role="menuitem">☀️ 라이트</button>
+              <button class="theme-option" type="button" data-theme="blue" role="menuitem">🌊 블루</button>
+              <button class="theme-option" type="button" data-theme="green" role="menuitem">🌿 그린</button>
+            </div>
+          </div>
         </div>
       </nav>
     </div>
@@ -1083,36 +1127,60 @@
   </script>
 
   <script>
-    // 테마 전환 (피드백 반영: 4가지 테마 순환, 글씨 대비 확보)
+    // 테마 드롭다운 (3차 피드백: 원하는 색을 한 번에 고를 수 있게 목록으로)
     (function () {
       const btn = document.getElementById("theme-toggle");
       const icon = document.getElementById("theme-icon");
       const label = document.getElementById("theme-label");
+      const menu = document.getElementById("theme-menu");
+      const options = menu.querySelectorAll(".theme-option");
 
-      const THEMES = [
-        { key: "dark",  icon: "🌙", label: "다크" },
-        { key: "light", icon: "☀️", label: "라이트" },
-        { key: "blue",  icon: "🌊", label: "블루" },
-        { key: "green", icon: "🌿", label: "그린" },
-      ];
+      const THEMES = {
+        dark:  { icon: "🌙", label: "다크" },
+        light: { icon: "☀️", label: "라이트" },
+        blue:  { icon: "🌊", label: "블루" },
+        green: { icon: "🌿", label: "그린" },
+      };
 
       function apply(key) {
+        if (!THEMES[key]) key = "dark";
         document.body.classList.remove("light", "blue", "green");
         if (key !== "dark") document.body.classList.add(key);
-        const t = THEMES.find((x) => x.key === key) || THEMES[0];
-        icon.textContent = t.icon;
-        label.textContent = t.label;
+        icon.textContent = THEMES[key].icon;
+        label.textContent = THEMES[key].label;
+        options.forEach((o) => o.classList.toggle("active", o.dataset.theme === key));
+        current = key;
+      }
+
+      function toggleMenu(open) {
+        const willOpen = open === undefined ? menu.hidden : open;
+        menu.hidden = !willOpen;
+        btn.setAttribute("aria-expanded", String(willOpen));
       }
 
       let current = localStorage.getItem("theme") || "dark";
-      if (!THEMES.some((x) => x.key === current)) current = "dark";
       apply(current);
 
-      btn.addEventListener("click", function () {
-        const idx = THEMES.findIndex((x) => x.key === current);
-        current = THEMES[(idx + 1) % THEMES.length].key;
-        localStorage.setItem("theme", current);
-        apply(current);
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        toggleMenu();
+      });
+
+      options.forEach((o) => {
+        o.addEventListener("click", function (e) {
+          e.stopPropagation();
+          const key = o.dataset.theme;
+          localStorage.setItem("theme", key);
+          apply(key);
+          toggleMenu(false);
+        });
+      });
+
+      // 바깥을 누르면 메뉴 닫기
+      document.addEventListener("click", function (e) {
+        if (!menu.hidden && !e.target.closest(".theme-wrap")) {
+          toggleMenu(false);
+        }
       });
     })();
   </script>
