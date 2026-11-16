@@ -198,6 +198,8 @@
     }
     .theme-option:hover { background: rgba(125,211,252,0.12); }
     .theme-option.active { background: rgba(125,211,252,0.18); font-weight: 700; }
+    /* hidden 속성이 항상 작동하도록 명시 (display:flex가 hidden을 덮는 문제 해결) */
+    .theme-menu[hidden] { display: none !important; }
     .theme-toggle:hover { border-color: var(--primary); }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
