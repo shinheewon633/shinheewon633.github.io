@@ -110,6 +110,29 @@
     body.light .btn.secondary { color: var(--text); }
     body.light .gb-item,
     body.light .card { background: rgba(255,255,255,0.85); }
+    /* 라이트 모드: 그라데이션 텍스트가 밝은 배경에 묻히지 않도록 진한 색으로 */
+    body.light h1,
+    body.light .logo,
+    body.light .section-title {
+      background: linear-gradient(135deg, #1d4ed8, #6d28d9 60%, #be185d);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    /* 라이트 모드: 아바타 글자와 버튼 글자 대비 */
+    body.light .avatar { color: #ffffff; }
+    body.light .btn.primary,
+    body.light .contact-cta { color: #0b1020; }
+    /* 라이트 모드: 배지·태그 등 포인트 색상 대비 */
+    body.light .badge {
+      background: rgba(190,24,93,0.08);
+      border-color: rgba(190,24,93,0.3);
+      color: var(--pink);
+    }
+    body.light .tag { background: rgba(4,120,87,0.1); }
+    body.light .timeline-item { border-left-color: rgba(29,78,216,0.5); }
+    body.light .info-list li { color: var(--muted); }
+    body.light .info-list strong { color: var(--text); }
     body.blue .gb-item, body.blue .card { background: rgba(18,58,99,0.85); }
     body.green .gb-item, body.green .card { background: rgba(20,61,46,0.85); }
 
