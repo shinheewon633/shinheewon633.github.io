@@ -24,6 +24,56 @@
       --grad-warm: linear-gradient(135deg, #fb923c, #f472b6);
       --grad-cool: linear-gradient(135deg, #34d399, #7dd3fc);
     }
+
+    /* 라이트 테마 (피드백 반영: 너무 어둡다는 의견) */
+    body.light {
+      --bg: #f5f7fc;
+      --panel: #ffffff;
+      --panel-2: #eef1f9;
+      --primary: #2563eb;
+      --secondary: #7c3aed;
+      --text: #1f2937;
+      --muted: #52607a;
+      --accent: #059669;
+      --pink: #db2777;
+      --orange: #ea580c;
+      --border: rgba(15,23,42,0.1);
+      --shadow: 0 14px 30px rgba(15,23,42,0.12);
+    }
+    body.light header { background: rgba(245,247,252,0.7); }
+    body.light .aurora {
+      background:
+        radial-gradient(45% 45% at 15% 20%, rgba(125,211,252,0.35), transparent 70%),
+        radial-gradient(40% 40% at 85% 15%, rgba(244,114,182,0.28), transparent 70%),
+        radial-gradient(50% 50% at 75% 80%, rgba(139,92,246,0.25), transparent 70%),
+        radial-gradient(45% 45% at 20% 85%, rgba(52,211,153,0.22), transparent 70%),
+        linear-gradient(135deg, #eef2fb, #f7f9fe 40%, #f3f5fc);
+    }
+    body.light .btn.secondary,
+    body.light .contact a,
+    body.light .gb-field input,
+    body.light .gb-field textarea { background: rgba(15,23,42,0.04); }
+    body.light .btn.secondary { color: var(--text); }
+    body.light .gb-item,
+    body.light .card { background: rgba(255,255,255,0.85); }
+
+    /* 테마 전환 버튼 */
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    body.light .theme-toggle { background: rgba(15,23,42,0.04); }
+    .theme-toggle:hover { border-color: var(--primary); }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
@@ -553,6 +603,14 @@
 </head>
 <body>
   <div class="aurora"></div>
+  <script>
+    // 저장된 테마를 먼저 적용 (페이지 깜빡임 방지)
+    (function () {
+      if (localStorage.getItem("theme") === "light") {
+        document.body.classList.add("light");
+      }
+    })();
+  </script>
 
   <header>
     <div class="container">
@@ -564,6 +622,10 @@
           <a href="#experience">Experience</a>
           <a href="#contact">Contact</a>
           <a href="#guestbook">Guestbook</a>
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="테마 전환">
+            <span id="theme-icon">🌙</span>
+            <span id="theme-label">밝게</span>
+          </button>
         </div>
       </nav>
     </div>
@@ -937,6 +999,31 @@
       });
 
       loadCount();
+    })();
+  </script>
+
+  <script>
+    // 테마 전환 (피드백 반영: 밝은 모드 선택 제공)
+    (function () {
+      const btn = document.getElementById("theme-toggle");
+      const icon = document.getElementById("theme-icon");
+      const label = document.getElementById("theme-label");
+
+      function apply(theme) {
+        const isLight = theme === "light";
+        document.body.classList.toggle("light", isLight);
+        icon.textContent = isLight ? "☀️" : "🌙";
+        label.textContent = isLight ? "어둡게" : "밝게";
+      }
+
+      // 처음 로드 시 저장된 테마로 초기화
+      apply(localStorage.getItem("theme") === "light" ? "light" : "dark");
+
+      btn.addEventListener("click", function () {
+        const next = document.body.classList.contains("light") ? "dark" : "light";
+        localStorage.setItem("theme", next);
+        apply(next);
+      });
     })();
   </script>
 </body>
