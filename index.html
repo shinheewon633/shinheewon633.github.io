@@ -463,6 +463,36 @@
       transform: translateY(-6px);
       box-shadow: 0 28px 50px rgba(0,0,0,0.45);
     }
+    /* 스킬 카드 펼침 */
+    .skill-card { cursor: pointer; user-select: none; }
+    .skill-card .skill-caret {
+      display: inline-block;
+      margin-left: 6px;
+      color: var(--muted);
+      font-size: 0.85em;
+      transition: transform 0.25s ease;
+    }
+    .skill-card.open .skill-caret { transform: rotate(180deg); color: var(--primary); }
+    .skill-card .skill-detail {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.3s ease;
+      margin-top: 0;
+    }
+    .skill-card.open .skill-detail {
+      max-height: 300px;
+      opacity: 1;
+      margin-top: 14px;
+    }
+    .skill-card .skill-detail p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border);
+    }
+    .skill-card:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
     .card h3 {
       margin-top: 0;
       margin-bottom: 12px;
@@ -861,8 +891,8 @@
       <div class="container">
         <h2 class="section-title reveal">Skills</h2>
         <div class="grid">
-          <div class="card reveal">
-            <h3>기획 &amp; 분석</h3>
+          <div class="card reveal skill-card" tabindex="0" role="button" aria-expanded="false">
+            <h3>기획 &amp; 분석 <span class="skill-caret">▾</span></h3>
             <ul>
               <li>서비스 아이디어 정리</li>
               <li>사용자 관점 분석</li>
@@ -873,9 +903,12 @@
               <span class="tag c2">Service Design</span>
               <span class="tag c3">Problem Solving</span>
             </div>
+            <div class="skill-detail">
+              <p>사용자 입장에서 "왜 불편한가"를 먼저 질문하고, 막연한 불편을 구체적인 문제로 바꾸는 연습을 하고 있습니다. 아이디어를 그냥 떠올리는 데 그치지 않고, 실제로 적용할 수 있는 형태로 정리하는 것을 목표로 합니다.</p>
+            </div>
           </div>
-          <div class="card reveal">
-            <h3>개발 관심</h3>
+          <div class="card reveal skill-card" tabindex="0" role="button" aria-expanded="false">
+            <h3>개발 관심 <span class="skill-caret">▾</span></h3>
             <ul>
               <li>웹 기반 서비스 이해</li>
               <li>프론트엔드 기본 학습</li>
@@ -886,9 +919,12 @@
               <span class="tag c2">CSS</span>
               <span class="tag c5">JavaScript</span>
             </div>
+            <div class="skill-detail">
+              <p>이 포트폴리오도 직접 HTML/CSS/JS로 만들었습니다. 방명록과 좋아요는 Supabase와 서버 함수로 연결해, 입력한 내용이 다른 기기에서도 보이도록 구현했습니다. 디자인과 코드가 어떻게 만나는지 배우는 중입니다.</p>
+            </div>
           </div>
-          <div class="card reveal">
-            <h3>강점</h3>
+          <div class="card reveal skill-card" tabindex="0" role="button" aria-expanded="false">
+            <h3>강점 <span class="skill-caret">▾</span></h3>
             <ul>
               <li>끊임없는 자기계발</li>
               <li>협업과 소통</li>
@@ -898,6 +934,9 @@
               <span class="tag c3">Learning</span>
               <span class="tag">Communication</span>
               <span class="tag c5">Growth</span>
+            </div>
+            <div class="skill-detail">
+              <p>모르는 것을 부끄러워하지 않고 물어보며 배웁니다. 이번 홈페이지도 동료 피드백을 받아 좋아요, 연락 버튼, 테마 기능을 차근차근 개선했습니다. 작은 개선을 쌓아 더 나은 결과를 만드는 과정을 좋아합니다.</p>
             </div>
           </div>
         </div>
@@ -1285,6 +1324,25 @@
             { duration: 800 + Math.random() * 400, easing: "cubic-bezier(.17,.67,.35,1)" }
           ).onfinish = () => piece.remove();
         }
+      });
+    })();
+  </script>
+
+  <script>
+    // 스킬 카드: 클릭 또는 Enter/Space로 펼치기·접기
+    (function () {
+      document.querySelectorAll(".skill-card").forEach(function (card) {
+        function toggle() {
+          const isOpen = card.classList.toggle("open");
+          card.setAttribute("aria-expanded", String(isOpen));
+        }
+        card.addEventListener("click", toggle);
+        card.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggle();
+          }
+        });
       });
     })();
   </script>
