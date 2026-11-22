@@ -555,7 +555,7 @@
       border-top: 1px solid var(--border);
     }
 
-    /* 클릭 효과 (재미 요소): 클릭한 자리에 퍼지는 링 + 반짝이는 점 */
+    /* 클릭 효과 (재미 요소): 퍼지는 링 + 다양한 모양·색의 조각들 */
     .click-ring {
       position: fixed;
       border: 2px solid var(--primary);
@@ -567,30 +567,26 @@
     }
     @keyframes ripple {
       0% { width: 0; height: 0; opacity: 0.9; }
-      100% { width: 140px; height: 140px; opacity: 0; }
+      100% { width: 160px; height: 160px; opacity: 0; }
     }
-    .click-dot {
+    .click-piece {
       position: fixed;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
       pointer-events: none;
       z-index: 300;
       transform: translate(-50%, -50%);
-      animation: spark 0.7s ease-out forwards;
+      line-height: 1;
     }
-    @keyframes spark {
-      0% { opacity: 1; }
-      100% { opacity: 0; }
-    }
-    /* 테마별 클릭 효과 색 */
-    body:not(.light):not(.blue):not(.green) .click-dot { background: var(--primary); }
+    .click-piece.shape-dot { border-radius: 50%; }
+    .click-piece.shape-square { border-radius: 2px; }
+    /* 테마별 클릭 효과 색 (다양한 색 팔레트) */
+    body:not(.light):not(.blue):not(.green) .click-ring { border-color: #7dd3fc; }
+    body:not(.light):not(.blue):not(.green) .click-piece { color: #7dd3fc; }
     body.light .click-ring { border-color: #be185d; }
-    body.light .click-dot { background: #be185d; }
+    body.light .click-piece { color: #be185d; }
     body.blue .click-ring { border-color: #5eead4; }
-    body.blue .click-dot { background: #5eead4; }
+    body.blue .click-piece { color: #5eead4; }
     body.green .click-ring { border-color: #a7f3d0; }
-    body.green .click-dot { background: #a7f3d0; }
+    body.green .click-piece { color: #a7f3d0; }
 
     /* 좋아요 */
     .like-box {
@@ -1239,8 +1235,16 @@
   </script>
 
   <script>
-    // 클릭 효과 (재미 요소): 배경을 클릭하면 그 자리에 퍼지는 링과 반짝이는 점
+    // 클릭 효과 (재미 요소): 퍼지는 링 + 다양한 모양·색·회전의 조각들이 튀어 오름
     (function () {
+      const SHAPES = [
+        { ch: "✦", type: "text" },   // 별
+        { ch: "♥", type: "text" },   // 하트
+        { ch: "●", type: "text" },   // 원
+        { ch: "■", type: "text" },   // 사각
+        { ch: "✿", type: "text" },   // 꽃
+      ];
+
       document.addEventListener("click", function (e) {
         // 버튼·링크·입력칸·테마 메뉴를 누른 건 효과를 내지 않음 (기능 방해 안 함)
         if (e.target.closest("a, button, input, textarea, select, .theme-menu")) return;
@@ -1253,26 +1257,33 @@
         document.body.appendChild(ring);
         ring.addEventListener("animationend", () => ring.remove());
 
-        // 2) 사방으로 흩어지는 반짝이는 점들 (색은 테마 CSS가 정함)
-        for (let i = 0; i < 8; i++) {
-          const dot = document.createElement("div");
-          dot.className = "click-dot";
-          dot.style.left = e.clientX + "px";
-          dot.style.top = e.clientY + "px";
-          document.body.appendChild(dot);
+        // 2) 다양한 모양의 조각들이 위로 튀었다가 중력으로 떨어짐
+        const count = 12;
+        for (let i = 0; i < count; i++) {
+          const shape = SHAPES[i % SHAPES.length];
+          const piece = document.createElement("div");
+          piece.className = "click-piece shape-" + (shape.ch === "●" ? "dot" : shape.ch === "■" ? "square" : "other");
+          piece.textContent = shape.ch;
+          piece.style.left = e.clientX + "px";
+          piece.style.top = e.clientY + "px";
+          piece.style.fontSize = 12 + Math.random() * 16 + "px";
+          document.body.appendChild(piece);
 
-          const angle = (Math.PI * 2 * i) / 8;
-          const dist = 50 + Math.random() * 40;
-          const dx = Math.cos(angle) * dist;
-          const dy = Math.sin(angle) * dist;
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 60 + Math.random() * 90;
+          const dx = Math.cos(angle) * speed;
+          const dy = Math.sin(angle) * speed - 40; // 위로 살짝 튀기
+          const spin = (Math.random() - 0.5) * 720;
+          const fall = 60 + Math.random() * 40; // 마지막에 아래로 떨어짐
 
-          dot.animate(
+          piece.animate(
             [
-              { transform: `translate(-50%, -50%)`, opacity: 1 },
-              { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`, opacity: 0 },
+              { transform: `translate(-50%, -50%) rotate(0deg)`, opacity: 1 },
+              { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${spin / 2}deg)`, opacity: 0.9, offset: 0.6 },
+              { transform: `translate(calc(-50% + ${dx * 1.4}px), calc(-50% + ${dy + fall}px)) rotate(${spin}deg)`, opacity: 0 },
             ],
-            { duration: 600 + Math.random() * 200, easing: "ease-out" }
-          ).onfinish = () => dot.remove();
+            { duration: 800 + Math.random() * 400, easing: "cubic-bezier(.17,.67,.35,1)" }
+          ).onfinish = () => piece.remove();
         }
       });
     })();
