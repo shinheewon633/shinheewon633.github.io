@@ -555,6 +555,43 @@
       border-top: 1px solid var(--border);
     }
 
+    /* 클릭 효과 (재미 요소): 클릭한 자리에 퍼지는 링 + 반짝이는 점 */
+    .click-ring {
+      position: fixed;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 300;
+      transform: translate(-50%, -50%);
+      animation: ripple 0.65s ease-out forwards;
+    }
+    @keyframes ripple {
+      0% { width: 0; height: 0; opacity: 0.9; }
+      100% { width: 140px; height: 140px; opacity: 0; }
+    }
+    .click-dot {
+      position: fixed;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 300;
+      transform: translate(-50%, -50%);
+      animation: spark 0.7s ease-out forwards;
+    }
+    @keyframes spark {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    /* 테마별 클릭 효과 색 */
+    body:not(.light):not(.blue):not(.green) .click-dot { background: var(--primary); }
+    body.light .click-ring { border-color: #be185d; }
+    body.light .click-dot { background: #be185d; }
+    body.blue .click-ring { border-color: #5eead4; }
+    body.blue .click-dot { background: #5eead4; }
+    body.green .click-ring { border-color: #a7f3d0; }
+    body.green .click-dot { background: #a7f3d0; }
+
     /* 좋아요 */
     .like-box {
       display: flex;
@@ -1197,6 +1234,46 @@
       // ESC 키로 닫기
       document.addEventListener("keydown", function (e) {
         if (e.key === "Escape" && !menu.hidden) closeMenu();
+      });
+    })();
+  </script>
+
+  <script>
+    // 클릭 효과 (재미 요소): 배경을 클릭하면 그 자리에 퍼지는 링과 반짝이는 점
+    (function () {
+      document.addEventListener("click", function (e) {
+        // 버튼·링크·입력칸·테마 메뉴를 누른 건 효과를 내지 않음 (기능 방해 안 함)
+        if (e.target.closest("a, button, input, textarea, select, .theme-menu")) return;
+
+        // 1) 퍼지는 링
+        const ring = document.createElement("div");
+        ring.className = "click-ring";
+        ring.style.left = e.clientX + "px";
+        ring.style.top = e.clientY + "px";
+        document.body.appendChild(ring);
+        ring.addEventListener("animationend", () => ring.remove());
+
+        // 2) 사방으로 흩어지는 반짝이는 점들 (색은 테마 CSS가 정함)
+        for (let i = 0; i < 8; i++) {
+          const dot = document.createElement("div");
+          dot.className = "click-dot";
+          dot.style.left = e.clientX + "px";
+          dot.style.top = e.clientY + "px";
+          document.body.appendChild(dot);
+
+          const angle = (Math.PI * 2 * i) / 8;
+          const dist = 50 + Math.random() * 40;
+          const dx = Math.cos(angle) * dist;
+          const dy = Math.sin(angle) * dist;
+
+          dot.animate(
+            [
+              { transform: `translate(-50%, -50%)`, opacity: 1 },
+              { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`, opacity: 0 },
+            ],
+            { duration: 600 + Math.random() * 200, easing: "ease-out" }
+          ).onfinish = () => dot.remove();
+        }
       });
     })();
   </script>
